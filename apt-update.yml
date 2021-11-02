@@ -1,0 +1,9 @@
+# apt-update.yml
+
+---
+  - hosts: webservers:loadbalancers
+    #become: true   - run all as sudo
+    tasks:
+       - name: Updating apt packages (yum also possible)
+         apt : name=* state=latest
+

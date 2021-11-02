@@ -1,0 +1,31 @@
+# setup-app.yml
+
+---
+  - hosts: webservers
+    tasks:
+     # Copying files
+     - name: Upload index.php file
+       copy: 
+         src: ./index.php
+         dest: /var/www/html
+         mode: 0755
+     - name: Upload phpinfo.php file
+       copy:
+         src: ./phpinfo.php
+         dest: /var/www/html
+         mode: 0755
+
+     # Make changes in files
+     - name: Configure php.ini file
+       lineinfile:
+         path: /etc/php/7.4/apache2/php.ini 
+         regexp: ^short_open_tag
+         line: 'short_open_tag=ON'
+       notify: restart apache
+
+     # Restart Services
+    handlers: 
+      - name: restart apache
+        service: 
+           name: apache2
+           state: restarted 

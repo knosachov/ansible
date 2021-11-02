@@ -1,0 +1,27 @@
+# install-services.yml
+
+
+---
+
+  - hosts: loadbalancers
+    tasks:
+      - name: Installing apache
+        apt: 
+          name: apache2
+      - name: Ensure apache starts
+        service:
+          name: apache2
+          state: started
+          enabled: yes
+  - hosts: webservers
+    tasks:
+      - name: Installing http and php
+        apt:
+          pkg:
+            - apache2
+            - php
+      - name: Ensure apache starts
+        service:
+          name: apache2
+          state: started
+          enabled: yes
