@@ -1,0 +1,33 @@
+---
+# tasks file for roles/webservers
+     # Copying files
+     - name: Upload index.php file
+       copy:
+         src: ../files/index.php
+         dest: "{{ path_to_app  }}"
+         mode: 0755
+     - name: Upload phpinfo.php file
+       copy:
+         src: ../files/phpinfo.php
+         dest: "{{ path_to_app  }}"
+         mode: 0755
+     - name: Create simple info page
+       copy:
+         dest: "{{ path_to_app  }}/info.php"
+         content: "<h1> Info about our server {{ ansible_hostname  }} </h1>"      #Square bracers are needed to evaluate an ansible variable
+
+     - name: See directory contents
+       command: ls -lsa {{ path_to_app }}
+       register: dir_contents                                                      #Saves an ls output into variable called dir_content, so we could print it again using debug module.
+
+     - name: Debug directory contents
+       debug:
+         msg: "{{ dir_contents  }}"
+
+     # Make changes in files
+     - name: Configure php.ini file
+       lineinfile:
+         path: /etc/php/7.4/apache2/php.ini
+         regexp: ^short_open_tag
+         line: 'short_open_tag=ON'
+       notify: restart apache
