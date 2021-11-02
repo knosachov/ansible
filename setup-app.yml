@@ -14,6 +14,10 @@
          src: ./phpinfo.php
          dest: /var/www/html
          mode: 0755
+     - name: Create simple info page
+       copy:
+         dest: /var/www/html/info.php
+         content: "<h1> Info about our server {{ ansible_hostname  }} </h1>"      #Square bracers are needed to evaluate an ansible variable
 
      # Make changes in files
      - name: Configure php.ini file
