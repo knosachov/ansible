@@ -6,6 +6,15 @@
     vars:
       path_to_app: "/var/www/html"
 
+# requires --ask-vault-pass argument while running ansible-playbook
+#    vars_files:
+#      - ./vars/secret-variables.yml
+ 
+# Prompt user to type yes if phpinfo needed
+#    vars_prompt:
+#      - name: "create_phpinfo"
+#        prompt: "Type <yes> to upload a phpinfo.php file in root directory:"    
+
     tasks:
      # Copying files
      - name: Upload index.php file
@@ -15,13 +24,19 @@
          mode: 0755
        tags: upload_index
 
+#     - name: Use secret password here
+#       debug:
+#         msg: "{{ secret_password  }}"
+#       tags: show_password
+
      - name: Upload phpinfo.php file
        copy:
          src: ./phpinfo.php
          dest: "{{ path_to_app  }}"
          mode: 0755
+#       when: create_phpinfo == 'yes'
        tags: upload_phpinfo
-
+   
      - name: Create simple info page
        copy:
          dest: "{{ path_to_app  }}/info.php"
